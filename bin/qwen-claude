@@ -1,12 +1,23 @@
 #!/bin/bash
 
-# Qwen Coder 3 Claude Code Integration
+# Qwen Coder 3 Claude Code Integration with Interactive Model Selection
 set -e
 
 # Configuration
 QWEN_API_KEY=${QWEN_API_KEY:-}
 QWEN_BASE_URL=${QWEN_BASE_URL:-"https://dashscope.aliyuncs.com/compatible-mode/v1/"}
-QWEN_MODEL=${QWEN_MODEL:-"qwen3-coder-plus"}
+
+# Load previously selected model or use default
+CONFIG_DIR="$HOME/.config/qwen-coder-3-tools"
+MODEL_CONFIG="$CONFIG_DIR/model_selection"
+DEFAULT_MODEL="qwen3-coder-plus"
+
+# Load persisted model if exists
+if [[ -f "$MODEL_CONFIG" ]]; then
+    source "$MODEL_CONFIG"
+fi
+
+QWEN_MODEL=${QWEN_MODEL:-$DEFAULT_MODEL}
 
 # Check if API key is set
 if [[ -z "$QWEN_API_KEY" ]]; then
@@ -15,8 +26,85 @@ if [[ -z "$QWEN_API_KEY" ]]; then
     exit 1
 fi
 
+# Interactive model selection
+select_model() {
+    local current_model="$QWEN_MODEL"
+    
+    echo "🎯 Current model: $current_model"
+    echo ""
+    
+    # Ask if user wants to switch model
+    read -p "Do you want to switch models? [y/N]: " -n 1 -r
+    echo ""
+    
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "📊 Available Qwen Models:"
+        echo "=================================================="
+        echo " 1. qwen3-coder-plus     Premium coding agent with 1M+ context"
+        echo " 2. qwen3-coder-turbo    Fast coding with 1M+ context"
+        echo " 3. qwen-plus            Balanced performance, speed, and cost"
+        echo " 4. qwen-turbo           Fast speed, low cost for simple jobs"
+        echo " 5. qwen-max             Best inference performance for complex tasks"
+        echo " 6. qwen3-72b-instruct   72B - Massive reasoning model"
+        echo " 7. qwen3-32b-instruct   32B - Large model for complex tasks"
+        echo " 8. qwen3-8b-instruct    8B - General purpose model"
+        echo " 9. qwen3-7b-instruct    7B - Balanced performance and speed"
+        echo "10. qwen3-1.5b-instruct  1.5B - Lightweight for simple tasks"
+        echo "11. qwen3-0.5b-instruct  0.5B - Ultra-lightweight for basic tasks"
+        echo "12. qwq-plus             Advanced reasoning model"
+        echo "13. qvq-max              Visual reasoning model"
+        echo "14. qwen-vl-max          Visual understanding"
+        echo "15. qwen-vl-plus         Enhanced visual recognition"
+        echo "16. qwen-omni-turbo      Multimodal text+image+audio"
+        
+        echo ""
+        read -p "Select model number [1-16]: " selection
+        
+        # Validate selection
+        if [[ $selection =~ ^[0-9]+$ ]] && [ $selection -ge 1 ] && [ $selection -le 16 ]; then
+            case $selection in
+                1) selected_model="qwen3-coder-plus" ;;
+                2) selected_model="qwen3-coder-turbo" ;;
+                3) selected_model="qwen-plus" ;;
+                4) selected_model="qwen-turbo" ;;
+                5) selected_model="qwen-max" ;;
+                6) selected_model="qwen3-72b-instruct" ;;
+                7) selected_model="qwen3-32b-instruct" ;;
+                8) selected_model="qwen3-8b-instruct" ;;
+                9) selected_model="qwen3-7b-instruct" ;;
+                10) selected_model="qwen3-1.5b-instruct" ;;
+                11) selected_model="qwen3-0.5b-instruct" ;;
+                12) selected_model="qwq-plus" ;;
+                13) selected_model="qvq-max" ;;
+                14) selected_model="qwen-vl-max" ;;
+                15) selected_model="qwen-vl-plus" ;;
+                16) selected_model="qwen-omni-turbo" ;;
+            esac
+            
+            export QWEN_MODEL="$selected_model"
+            
+            # Persist the selection for future sessions
+            echo "export QWEN_MODEL=$selected_model" > "$MODEL_CONFIG"
+            
+            echo "✅ Selected model: $selected_model"
+            echo ""
+        else
+            echo "⚠️  Invalid selection, using current model: $current_model"
+        fi
+    fi
+}
+
+# Check if interactive mode is enabled (default: enabled when no args)
+if [[ $# -eq 0 ]]; then
+    select_model
+fi
+
+# Ensure config directory exists
+mkdir -p "$CONFIG_DIR"
+
 # Log usage
-echo "$(date): Starting Qwen Claude session with model $QWEN_MODEL" >> ~/.config/qwen-coder-3-tools/usage.log
+echo "$(date): Starting Qwen Claude session with model $QWEN_MODEL" >> "$CONFIG_DIR/usage.log"
 
 # Set Claude Code environment variables
 export ANTHROPIC_AUTH_TOKEN="$QWEN_API_KEY"
@@ -32,4 +120,4 @@ echo ""
 claude "$@"
 
 # Log completion
-echo "$(date): Qwen Claude session ended" >> ~/.config/qwen-coder-3-tools/usage.log
+echo "$(date): Qwen Claude session ended" >> "$CONFIG_DIR/usage.log"
