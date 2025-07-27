@@ -35,7 +35,13 @@ cat > ~/.local/bin/qwen-code-wrapper << 'EOF'
 #!/bin/bash
 # Qwen Code wrapper with environment variables
 
-# Check if .qwen/.env exists and source it
+# Source global configuration
+GLOBAL_CONFIG="$HOME/.config/qwen-coder-3-tools/global.env"
+if [[ -f "$GLOBAL_CONFIG" ]]; then
+    source "$GLOBAL_CONFIG"
+fi
+
+# Check if .qwen/.env exists and source it (project-specific overrides)
 if [[ -f .qwen/.env ]]; then
     source .qwen/.env
 fi
