@@ -1,0 +1,13 @@
+.env
+.qwen/
+logs/
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+.idea/
+*.egg-info/
+dist/
+build/
+config/local-*.json

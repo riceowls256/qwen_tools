@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Qwen Coder 3 Claude Code Integration
+set -e
+
+# Configuration
+QWEN_API_KEY=${QWEN_API_KEY:-}
+QWEN_BASE_URL=${QWEN_BASE_URL:-"https://dashscope.aliyuncs.com/compatible-mode/v1/"}
+QWEN_MODEL=${QWEN_MODEL:-"qwen-coder-3-7b-instruct"}
+
+# Check if API key is set
+if [[ -z "$QWEN_API_KEY" ]]; then
+    echo "❌ QWEN_API_KEY environment variable is not set"
+    echo "Please set it with: export QWEN_API_KEY='your-api-key'"
+    exit 1
+fi
+
+# Log usage
+echo "$(date): Starting Qwen Claude session with model $QWEN_MODEL" >> ~/.config/qwen-coder-3-tools/usage.log
+
+# Set Claude Code environment variables
+export ANTHROPIC_AUTH_TOKEN="$QWEN_API_KEY"
+export ANTHROPIC_BASE_URL="$QWEN_BASE_URL"
+export ANTHROPIC_MODEL="$QWEN_MODEL"
+
+# Start Claude Code
+echo "🚀 Starting Claude Code with Qwen Coder 3 ($QWEN_MODEL)"
+echo "API Endpoint: $QWEN_BASE_URL"
+echo ""
+
+# Run Claude Code
+claude "$@"
+
+# Log completion
+echo "$(date): Qwen Claude session ended" >> ~/.config/qwen-coder-3-tools/usage.log

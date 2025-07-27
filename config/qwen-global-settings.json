@@ -1,0 +1,26 @@
+{
+  "default_model": "qwen-coder-3-7b-instruct",
+  "available_models": {
+    "qwen-coder-3-7b-instruct": {
+      "description": "7B parameter model optimized for coding",
+      "max_tokens": 32768,
+      "cost_per_1k_input": 0.0001,
+      "cost_per_1k_output": 0.0002
+    },
+    "qwen-coder-3-1.5b-instruct": {
+      "description": "1.5B parameter model for lightweight tasks",
+      "max_tokens": 32768,
+      "cost_per_1k_input": 0.00005,
+      "cost_per_1k_output": 0.0001
+    }
+  },
+  "api_settings": {
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/",
+    "timeout": 30,
+    "max_retries": 3
+  },
+  "claude_compatibility": {
+    "anthropic_version": "2023-06-01",
+    "anthropic_beta": "messages-2023-12-15"
+  }
+}

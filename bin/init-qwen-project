@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Initialize Qwen Coder 3 in a project
+set -e
+
+echo "🎯 Initializing Qwen Coder 3 for project: $(basename "$PWD")"
+
+# Create .qwen directory
+mkdir -p .qwen
+
+# Create project configuration
+cat > .qwen/config.json << EOF
+{
+  "project_name": "$(basename "$PWD")",
+  "qwen_model": "qwen-coder-3-7b-instruct",
+  "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/",
+  "created_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "settings": {
+    "max_tokens": 4000,
+    "temperature": 0.7,
+    "top_p": 0.9
+  }
+}
+EOF
+
+# Create .env template
+cat > .qwen/.env.template << EOF
+# Qwen Coder 3 Configuration
+QWEN_API_KEY=your-qwen-coder-3-api-key
+QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1/
+QWEN_MODEL=qwen-coder-3-7b-instruct
+
+# Optional: Claude Code integration
+ANTHROPIC_AUTH_TOKEN=\${QWEN_API_KEY}
+ANTHROPIC_BASE_URL=\${QWEN_BASE_URL}
+ANTHROPIC_MODEL=\${QWEN_MODEL}
+EOF
+
+# Create .gitignore for Qwen files
+cat > .qwen/.gitignore << EOF
+.env
+logs/
+*.log
+usage.json
+costs.json
+EOF
+
+# Create logs directory
+mkdir -p .qwen/logs
+
+echo "✅ Qwen Coder 3 initialized for $(basename "$PWD")"
+echo ""
+echo "🔧 Next steps:"
+echo "1. Copy .qwen/.env.template to .qwen/.env"
+echo "2. Add your QWEN_API_KEY to .qwen/.env"
+echo "3. Start using: qwen-claude"
