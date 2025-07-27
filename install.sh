@@ -20,6 +20,10 @@ for script in bin/*; do
     chmod +x ~/.local/bin/"$basename_script"
 done
 
+# Install qwen-code CLI
+echo "📦 Installing official qwen-code CLI..."
+./bin/qwen-code-setup
+
 # Install tools to ~/.local/bin
 echo "📦 Installing tools to ~/.local/bin..."
 for tool in tools/*; do

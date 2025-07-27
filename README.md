@@ -8,21 +8,25 @@ Similar to kimik2-tools but for Alibaba's Qwen Coder 3. Provides seamless integr
 
 ### **Installation**
 ```bash
-git clone https://github.com/riceowls256/qwen-coder-3-tools.git
-cd qwen-coder-3-tools
+git clone https://github.com/riceowls256/qwen_tools.git
+cd qwen_tools
 ./install.sh
 ```
 
 ### **Usage**
 ```bash
-# Start Claude Code with Qwen Coder 3
-qwen-claude
+# Start official Qwen Code CLI
+qwen-code                    # Interactive mode
+qwen-code 'write a function' # Direct prompt
 
 # Track usage and costs
 qwen-dashboard
 
 # Initialize project-specific settings
 init-qwen-project
+
+# Legacy integration (Claude Code wrapper)
+qwen-claude
 ```
 
 ## 📋 Prerequisites

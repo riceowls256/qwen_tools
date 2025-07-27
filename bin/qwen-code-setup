@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Qwen Code CLI Setup Script
+# Integrates the official qwen-code CLI from Qwen3-Coder
+
+set -e
+
+echo "🚀 Setting up Qwen Code CLI..."
+
+# Check if Node.js is installed
+if ! command -v node >/dev/null 2>&1; then
+    echo "❌ Node.js not found. Installing Node.js..."
+    
+    # Install Node.js via nvm (recommended)
+    if ! command -v nvm >/dev/null 2>&1; then
+        echo "📦 Installing nvm..."
+        curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+        source ~/.bashrc 2>/dev/null || source ~/.zshrc
+    fi
+    
+    echo "📦 Installing Node.js 22..."
+    nvm install 22
+    nvm use 22
+fi
+
+# Install qwen-code CLI globally
+echo "📦 Installing qwen-code CLI..."
+npm install -g @qwen-code/qwen-code
+
+# Create wrapper scripts
+echo "📝 Creating wrapper scripts..."
+
+# Create qwen-code wrapper
+cat > ~/.local/bin/qwen-code-wrapper << 'EOF'
+#!/bin/bash
+# Qwen Code wrapper with environment variables
+
+# Check if .qwen/.env exists and source it
+if [[ -f .qwen/.env ]]; then
+    source .qwen/.env
+fi
+
+# Set default environment variables
+export OPENAI_API_KEY="${QWEN_API_KEY:-${DASHSCOPE_API_KEY}}"
+export OPENAI_BASE_URL="${QWEN_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}"
+export OPENAI_MODEL="${QWEN_MODEL:-qwen3-coder-plus}"
+
+# Check if API key is set
+if [[ -z "$OPENAI_API_KEY" ]]; then
+    echo "❌ QWEN_API_KEY or DASHSCOPE_API_KEY environment variable is not set"
+    echo "Please set it with: export QWEN_API_KEY='your-api-key'"
+    echo "Or create .qwen/.env file in your project"
+    exit 1
+fi
+
+# Run qwen-code
+exec qwen "$@"
+EOF
+
+chmod +x ~/.local/bin/qwen-code-wrapper
+
+# Create symlink for easy access
+ln -sf ~/.local/bin/qwen-code-wrapper ~/.local/bin/qwen-code
+
+echo "✅ Qwen Code CLI installed and configured!"
+echo ""
+echo "🔧 Next steps:"
+echo "1. Set your API key:"
+echo "   export QWEN_API_KEY='your-api-key'"
+echo "2. Or create .qwen/.env in your project"
+echo "3. Use: qwen-code"
+echo "   Or: qwen-code-wrapper"
+echo ""
+echo "💡 Usage examples:"
+echo "   qwen-code                    # Interactive mode"
+echo "   qwen-code 'write a function' # Direct prompt"
+echo "   qwen-code --help             # Show all options"
