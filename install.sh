@@ -44,6 +44,30 @@ if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc 2>/dev/null || true
 fi
 
+# Create global Qwen configuration
+GLOBAL_CONFIG="$HOME/.config/qwen-coder-3-tools/global.env"
+mkdir -p "$(dirname "$GLOBAL_CONFIG")"
+
+echo "📝 Creating global Qwen configuration..."
+cat > "$GLOBAL_CONFIG" << 'EOF'
+# Global Qwen API Configuration
+# Set your Qwen API key here for all projects
+# export QWEN_API_KEY="your-dashscope-api-key"
+export QWEN_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1/"
+export QWEN_MODEL="qwen3-coder-plus"
+EOF
+
+# Add source command to shell profiles
+for shell_file in ~/.bashrc ~/.zshrc; do
+    if [[ -f "$shell_file" ]]; then
+        if ! grep -q "source $GLOBAL_CONFIG" "$shell_file" 2>/dev/null; then
+            echo "" >> "$shell_file"
+            echo "# Qwen Coder 3 Global Configuration" >> "$shell_file"
+            echo "source $GLOBAL_CONFIG" >> "$shell_file"
+        fi
+    fi
+done
+
 echo "✅ Qwen Coder 3 Tools installed successfully!"
 echo ""
 echo "🔧 Next steps:"
@@ -62,4 +86,6 @@ echo "   - qwen-claude shows current model and prompts for selection"
 echo "   - Model choice persists across sessions"
 echo "   - 16 Qwen models available with descriptions"
 echo ""
-echo "💡 Don't forget to restart your terminal or run: source ~/.bashrc"
+echo "💡 Global setup complete - API key persists across all projects!"
+echo "   Config file: ~/.config/qwen-coder-3-tools/global.env"
+echo "   Run: source ~/.bashrc  # or ~/.zshrc to reload"
