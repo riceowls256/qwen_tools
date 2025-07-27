@@ -24,6 +24,11 @@ done
 echo "📦 Installing official qwen-code CLI..."
 ./bin/qwen-code-setup
 
+# Install qwen-claude wrapper
+echo "📦 Installing qwen-claude wrapper..."
+cp bin/qwen-claude ~/.local/bin/qwen-claude
+chmod +x ~/.local/bin/qwen-claude
+
 # Install tools to ~/.local/bin
 echo "📦 Installing tools to ~/.local/bin..."
 for tool in tools/*; do
