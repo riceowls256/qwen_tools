@@ -1,17 +1,142 @@
 {
-  "default_model": "qwen-coder-3-7b-instruct",
-  "available_models": {
-    "qwen-coder-3-7b-instruct": {
-      "description": "7B parameter model optimized for coding",
-      "max_tokens": 32768,
-      "cost_per_1k_input": 0.0001,
-      "cost_per_1k_output": 0.0002
+  "default_model": "qwen3-coder-plus",
+  "model_groups": {
+    "flagship": {
+      "description": "Premium flagship models for best performance",
+      "models": {
+        "qwen-max": {
+          "description": "Qwen-Max - Best inference performance for complex tasks",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.0016,
+          "cost_per_1k_output": 0.0064,
+          "max_input_tokens": 30720,
+          "max_output_tokens": 8192
+        },
+        "qwen-plus": {
+          "description": "Qwen-Plus - Balanced performance, speed, and cost",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.0004,
+          "cost_per_1k_output": 0.0012,
+          "max_input_tokens": 129024,
+          "max_output_tokens": 16384
+        },
+        "qwen-turbo": {
+          "description": "Qwen-Turbo - Fast speed, low cost for simple jobs",
+          "max_tokens": 1008192,
+          "cost_per_1k_input": 0.00005,
+          "cost_per_1k_output": 0.0002,
+          "max_input_tokens": 1000000,
+          "max_output_tokens": 8192
+        }
+      }
     },
-    "qwen-coder-3-1.5b-instruct": {
-      "description": "1.5B parameter model for lightweight tasks",
-      "max_tokens": 32768,
-      "cost_per_1k_input": 0.00005,
-      "cost_per_1k_output": 0.0001
+    "coder": {
+      "description": "Specialized coding models with agent capabilities",
+      "models": {
+        "qwen3-coder-plus": {
+          "description": "Qwen3-Coder-Plus - Premium coding agent with 1M+ context",
+          "max_tokens": 1048576,
+          "cost_per_1k_input": 0.001,
+          "cost_per_1k_output": 0.005,
+          "max_input_tokens": 1000000,
+          "max_output_tokens": 65536,
+          "tiered_pricing": true
+        },
+        "qwen3-coder-turbo": {
+          "description": "Qwen3-Coder-Turbo - Fast coding with 1M+ context",
+          "max_tokens": 1048576,
+          "cost_per_1k_input": 0.0005,
+          "cost_per_1k_output": 0.001,
+          "max_input_tokens": 1000000,
+          "max_output_tokens": 8192
+        }
+      }
+    },
+    "open_source": {
+      "description": "Open-source Qwen3 models for various use cases",
+      "models": {
+        "qwen3-72b-instruct": {
+          "description": "72B - Massive reasoning model",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.004,
+          "cost_per_1k_output": 0.008
+        },
+        "qwen3-32b-instruct": {
+          "description": "32B - Large model for complex tasks",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.002,
+          "cost_per_1k_output": 0.004
+        },
+        "qwen3-8b-instruct": {
+          "description": "8B - General purpose model",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.0002,
+          "cost_per_1k_output": 0.0004
+        },
+        "qwen3-7b-instruct": {
+          "description": "7B - Balanced performance and speed",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.0001,
+          "cost_per_1k_output": 0.0002
+        },
+        "qwen3-1.5b-instruct": {
+          "description": "1.5B - Lightweight for simple tasks",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.00005,
+          "cost_per_1k_output": 0.0001
+        },
+        "qwen3-0.5b-instruct": {
+          "description": "0.5B - Ultra-lightweight for basic tasks",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.00002,
+          "cost_per_1k_output": 0.00004
+        }
+      }
+    },
+    "specialized": {
+      "description": "Specialized models for specific use cases",
+      "models": {
+        "qwq-plus": {
+          "description": "QwQ-Plus - Advanced reasoning model",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.0008,
+          "cost_per_1k_output": 0.0024,
+          "max_input_tokens": 98304,
+          "max_output_tokens": 8192
+        },
+        "qvq-max": {
+          "description": "QVQ-Max - Visual reasoning model",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.0012,
+          "cost_per_1k_output": 0.0048,
+          "max_input_tokens": 106496,
+          "max_output_tokens": 8192
+        },
+        "qwen-vl-max": {
+          "description": "Qwen-VL-Max - Visual understanding",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.0008,
+          "cost_per_1k_output": 0.0032,
+          "max_input_tokens": 129024,
+          "max_output_tokens": 8192
+        },
+        "qwen-vl-plus": {
+          "description": "Qwen-VL-Plus - Enhanced visual recognition",
+          "max_tokens": 131072,
+          "cost_per_1k_input": 0.00021,
+          "cost_per_1k_output": 0.00063,
+          "max_input_tokens": 129024,
+          "max_output_tokens": 8192
+        },
+        "qwen-omni-turbo": {
+          "description": "Qwen-Omni-Turbo - Multimodal text+image+audio",
+          "max_tokens": 32768,
+          "cost_per_1k_input": 0.00007,
+          "cost_per_1k_output": 0.00027,
+          "max_input_tokens": 30720,
+          "max_output_tokens": 2048
+        }
+      }
     }
   },
   "api_settings": {
@@ -19,8 +144,9 @@
     "timeout": 30,
     "max_retries": 3
   },
-  "claude_compatibility": {
-    "anthropic_version": "2023-06-01",
-    "anthropic_beta": "messages-2023-12-15"
+  "pricing_notes": {
+    "qwen3-coder-plus": "Tiered pricing: 0-32K: $1/$5, 32K-128K: $1.8/$9, 128K-256K: $3/$15, 256K-1M: $6/$60 per million tokens",
+    "batch_discount": "All models get 50% discount on batch processing",
+    "free_quota": "1 million tokens free for 180 days after activation",
+    "currency": "USD"
   }
-}
